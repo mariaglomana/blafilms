@@ -5,7 +5,7 @@ import MovieCard from './MovieCard'
 
 const SearchResults = ({ searchResult }) => (
   <>
-    {!searchResult ? (
+    {!searchResult.length ? (
       <p>No results yet</p>
     ) : (
       <div className="search-results">
@@ -13,7 +13,7 @@ const SearchResults = ({ searchResult }) => (
           <ChevronLeft />
         </div>
         <div className="search-results-list">
-          {searchResult.Search.map(result => (
+          {searchResult.map(result => (
             <MovieCard result={result} />
           ))}
         </div>
