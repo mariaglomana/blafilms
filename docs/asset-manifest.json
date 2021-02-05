@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/blafilms/static/css/main.520be60a.chunk.css",
+    "main.js": "/blafilms/static/js/main.07ebe0be.chunk.js",
+    "main.js.map": "/blafilms/static/js/main.07ebe0be.chunk.js.map",
+    "runtime-main.js": "/blafilms/static/js/runtime-main.27cd4fbe.js",
+    "runtime-main.js.map": "/blafilms/static/js/runtime-main.27cd4fbe.js.map",
+    "static/js/2.368ec3bd.chunk.js": "/blafilms/static/js/2.368ec3bd.chunk.js",
+    "static/js/2.368ec3bd.chunk.js.map": "/blafilms/static/js/2.368ec3bd.chunk.js.map",
+    "index.html": "/blafilms/index.html",
+    "static/css/main.520be60a.chunk.css.map": "/blafilms/static/css/main.520be60a.chunk.css.map",
+    "static/js/2.368ec3bd.chunk.js.LICENSE.txt": "/blafilms/static/js/2.368ec3bd.chunk.js.LICENSE.txt",
+    "static/media/chevron-left.83a046de.svg": "/blafilms/static/media/chevron-left.83a046de.svg",
+    "static/media/chevron-right.2650504b.svg": "/blafilms/static/media/chevron-right.2650504b.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.27cd4fbe.js",
+    "static/js/2.368ec3bd.chunk.js",
+    "static/css/main.520be60a.chunk.css",
+    "static/js/main.07ebe0be.chunk.js"
+  ]
+}
