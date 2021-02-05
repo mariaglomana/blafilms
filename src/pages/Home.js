@@ -3,22 +3,33 @@ import 'App.css'
 import { InputSearch, SearchResults } from 'components'
 import getSearchResult from 'api'
 
+export const INIT_PAGE = 1
+
 function Home() {
-  const [searchResult, setSearchResult] = useState([])
+  const defaultResults = { numberOfPages: 0, page: INIT_PAGE, results: [] }
+  const [searchResult, setSearchResult] = useState(defaultResults)
   const [keyword, setKeyword] = useState('')
 
-  const search = async keyword => {
-    const data = await getSearchResult(keyword)
-    let newSearchResults = []
-    if (data?.Response === 'True') {
-      newSearchResults = data.Search
+  const search = async (keyword, page) => {
+    const response = await getSearchResult(keyword, page)
+    let newSearchResults = defaultResults
+    if (response) {
+      newSearchResults = response
     }
     setSearchResult(newSearchResults)
   }
 
+  const loadNewSearch = keyword => {
+    search(keyword, INIT_PAGE)
+  }
+
+  const loadNewPage = page => {
+    search(keyword, page)
+  }
+
   const handleSubmit = evt => {
     evt.preventDefault()
-    search(keyword)
+    loadNewSearch(keyword)
   }
 
   const handleChange = evt => {
@@ -32,7 +43,7 @@ function Home() {
         handleChange={handleChange}
         keyword={keyword}
       />
-      <SearchResults searchResult={searchResult} />
+      <SearchResults searchResult={searchResult} handleLoadPage={loadNewPage} />
     </div>
   )
 }
