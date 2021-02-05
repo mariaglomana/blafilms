@@ -4,7 +4,7 @@ import { ReactComponent as ChevronRight } from 'images/chevron-right.svg'
 import MovieCard from './MovieCard'
 import { INIT_PAGE } from 'pages/Home'
 
-const SearchResults = ({ searchResult, handleLoadPage }) => {
+const SearchResults = ({ searchResult, handleLoadPage, error }) => {
   const { numberOfPages, page, results } = searchResult
   const isFirstPage = page === INIT_PAGE
   const isLastPage = page === numberOfPages
@@ -13,7 +13,7 @@ const SearchResults = ({ searchResult, handleLoadPage }) => {
     <>
       {!results.length ? (
         <div className="no-results">
-          <p>No results yet</p>
+          <p>{error}</p>
         </div>
       ) : (
         <div className="search-results">

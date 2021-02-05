@@ -6,17 +6,29 @@ import getSearchResult from 'api'
 export const INIT_PAGE = 1
 
 function Home() {
-  const defaultResults = { numberOfPages: 0, page: INIT_PAGE, results: [] }
+  const defaultResults = {
+    numberOfPages: 0,
+    page: INIT_PAGE,
+    results: [],
+  }
+  const defaultError = 'No results yet'
   const [searchResult, setSearchResult] = useState(defaultResults)
+  const [error, setError] = useState(defaultError)
   const [keyword, setKeyword] = useState('')
 
   const search = async (keyword, page) => {
     const response = await getSearchResult(keyword, page)
     let newSearchResults = defaultResults
     if (response) {
-      newSearchResults = response
+      if (response?.error) {
+        setError(response.error)
+      } else {
+        newSearchResults = response
+      }
+      setSearchResult(newSearchResults)
+    } else {
+      setError(defaultError)
     }
-    setSearchResult(newSearchResults)
   }
 
   const loadNewSearch = keyword => {
@@ -43,7 +55,11 @@ function Home() {
         handleChange={handleChange}
         keyword={keyword}
       />
-      <SearchResults searchResult={searchResult} handleLoadPage={loadNewPage} />
+      <SearchResults
+        searchResult={searchResult}
+        handleLoadPage={loadNewPage}
+        error={error}
+      />
     </div>
   )
 }

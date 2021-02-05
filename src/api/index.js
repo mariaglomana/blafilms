@@ -1,11 +1,19 @@
+import axios from 'axios'
 const BASE_URL = `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_API_KEY}&s=`
 
+const api = axios.create({ baseURL: BASE_URL })
+
 export default async function getSearchResult(keyword, page) {
-  const response = await fetch(BASE_URL + keyword + '&page=' + page)
-  const data = await response.json()
-  if (data?.Response === 'True') {
-    const numberOfPages = Math.floor(data.totalResults / 10)
-    const results = data.Search
-    return { numberOfPages, page, results }
+  try {
+    const response = await api.get(BASE_URL + keyword + '&page=' + page)
+    if (response.data?.Response === 'True') {
+      const numberOfPages = Math.floor(response.data.totalResults / 10)
+      const results = response.data.Search
+      return { numberOfPages, page, results }
+    } else {
+      return { error: response.data.Error }
+    }
+  } catch (error) {
+    console.error(error)
   }
 }
