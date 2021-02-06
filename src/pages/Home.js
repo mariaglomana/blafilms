@@ -1,65 +1,63 @@
-import React, { useState } from 'react'
-import 'App.css'
-import { InputSearch, SearchResults } from 'components'
-import getSearchResult from 'api'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import debounce from 'just-debounce-it'
 
-export const INIT_PAGE = 1
+import 'App.css'
+import { INITIAL_PAGE } from 'constants/index'
+import { useNearScreen, useFilms } from 'hooks'
+import { MovieList, Spinner, InputSearch } from 'components'
 
 function Home() {
-  const defaultResults = {
-    numberOfPages: 0,
-    page: INIT_PAGE,
-    results: [],
-  }
-  const defaultError = 'No results yet'
-  const [searchResult, setSearchResult] = useState(defaultResults)
-  const [error, setError] = useState(defaultError)
-  const [keyword, setKeyword] = useState('')
+  const [keywordToSearch, setKeywordToSearch] = useState('')
 
-  const search = async (keyword, page) => {
-    const response = await getSearchResult(keyword, page)
-    let newSearchResults = defaultResults
-    if (response) {
-      if (response?.error) {
-        setError(response.error)
-      } else {
-        newSearchResults = response
-      }
-      setSearchResult(newSearchResults)
-    } else {
-      setError(defaultError)
-    }
+  const { loading, searchResults, page, setPage, error } = useFilms({
+    keyword: keywordToSearch,
+  })
+
+  const submitKeywordSearch = keyword => {
+    setPage(INITIAL_PAGE)
+    setKeywordToSearch(keyword)
   }
 
-  const loadNewSearch = keyword => {
-    search(keyword, INIT_PAGE)
+  const visorRef = useRef()
+  const { isNearScreen } = useNearScreen({
+    externalRef: !loading && visorRef,
+    once: false,
+  })
+
+  const handleNextPage = () => {
+    setPage(page => page + 1)
   }
 
-  const loadNewPage = page => {
-    search(keyword, page)
-  }
+  const debounceHandleNextPage = useCallback(
+    debounce(() => handleNextPage(), 200),
+    [],
+  )
 
-  const handleSubmit = evt => {
-    evt.preventDefault()
-    loadNewSearch(keyword)
-  }
-
-  const handleChange = evt => {
-    setKeyword(evt.target.value)
-  }
+  useEffect(() => {
+    if (isNearScreen) debounceHandleNextPage()
+  }, [isNearScreen, debounceHandleNextPage])
 
   return (
     <div className="App">
-      <InputSearch
-        handleSubmit={handleSubmit}
-        handleChange={handleChange}
-        keyword={keyword}
-      />
-      <SearchResults
-        searchResult={searchResult}
-        handleLoadPage={loadNewPage}
-        error={error}
-      />
+      <InputSearch submitKeywordSearch={submitKeywordSearch} />
+      {loading && page === 1 ? (
+        <div className="no-results">
+          <Spinner />
+        </div>
+      ) : !searchResults.length ? (
+        <div className="no-results">
+          <p>{error}</p>
+        </div>
+      ) : (
+        <>
+          <div className="search-results">
+            <div></div>
+            <MovieList results={searchResults} />
+            <div></div>
+          </div>
+          <div id="visor" ref={visorRef}></div>
+        </>
+      )}
     </div>
   )
 }

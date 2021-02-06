@@ -7,9 +7,8 @@ export default async function getSearchResult(keyword, page) {
   try {
     const response = await api.get(BASE_URL + keyword + '&page=' + page)
     if (response.data?.Response === 'True') {
-      const numberOfPages = Math.floor(response.data.totalResults / 10)
       const results = response.data.Search
-      return { numberOfPages, page, results }
+      return { results }
     } else {
       return { error: response.data.Error }
     }
