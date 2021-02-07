@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { trim } from 'lodash'
 
 const InputSearch = ({ submitKeywordSearch }) => {
@@ -24,4 +24,4 @@ const InputSearch = ({ submitKeywordSearch }) => {
   )
 }
 
-export default InputSearch
+export default React.memo(InputSearch)

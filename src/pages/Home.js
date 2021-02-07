@@ -13,10 +13,13 @@ function Home() {
     keyword: keywordToSearch,
   })
 
-  const submitKeywordSearch = keyword => {
-    setPage(INITIAL_PAGE)
-    setKeywordToSearch(keyword)
-  }
+  const submitKeywordSearch = useCallback(
+    keyword => {
+      setPage(INITIAL_PAGE)
+      setKeywordToSearch(keyword)
+    },
+    [setPage, setKeywordToSearch],
+  )
 
   const visorRef = useRef()
   const { isNearScreen } = useNearScreen({
@@ -30,7 +33,7 @@ function Home() {
 
   const debounceHandleNextPage = useCallback(
     debounce(() => handleNextPage(), 200),
-    [],
+    [setPage],
   )
 
   useEffect(() => {

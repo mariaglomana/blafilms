@@ -14,4 +14,4 @@ const MovieCard = ({ result }) => {
   )
 }
 
-export default MovieCard
+export default React.memo(MovieCard)
